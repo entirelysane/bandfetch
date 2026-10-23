@@ -2,10 +2,12 @@ import { BandcampFetch } from 'bandcamp-fetch';
 import { spawn } from 'node:child_process';
 import { once } from 'node:events';
 import { argv } from 'node:process';
-import 'dotenv/config'
+import { readFile } from 'node:fs/promises';
+import fs from 'fs';
+import 'dotenv/config';
 
-const download = async (url: string) => {
-  const child = spawn("bandcamp-dl", [url], {
+const download = async (url: string, options: Config) => {
+  const child = spawn("bandcamp-dl", [url, "--base-dir", options.saveDir], {
     stdio: 'inherit'
   });
 
@@ -43,6 +45,20 @@ const showHelp = () => {
   console.log('And yes. Only one line for now. Maybe later I\'ll do whole list or something like that')
 }
 
+interface Config {
+  saveDir: string;
+}
+
+const loadConfig = async () => {
+  const confPath = "./config.json";
+  if (!fs.existsSync(confPath)) {
+    throw new Error('Oooops! I can\'t find config file... Someone is fucked up');
+  }
+
+  const content = await readFile(confPath, "utf8");
+  return JSON.parse(content) as Config;
+}
+
 // FIXME: add cmd arg
 const main = async () => {
   const args = getArgs();
@@ -59,6 +75,8 @@ const main = async () => {
     showHelp();
     return;
   }
+
+  const config = await loadConfig();
 
   const cookie = process.env.BANDCAMP_COOKIE;
   if (!cookie) {
@@ -78,7 +96,7 @@ const main = async () => {
     console.log(`${album.artist?.name} - ${album.name}`);
     console.log(`Downloading: ${album.url}`);
 
-    await download(album.url.toString());
+    await download(album.url.toString(), config);
   }
 }
 
