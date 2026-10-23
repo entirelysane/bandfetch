@@ -91,6 +91,12 @@ $env:BANDCAMP_COOKIE = "your-cookie-value"
 bandfetch https://artist.bandcamp.com/
 ```
 
+## Built with
+
+- [picocolors](https://github.com/alexeyraspopov/picocolors) for terminal text coloring.
+- [bandcamp-fetch](https://github.com/patrickkfkan/bandcamp-fetch) for fetching Bandcamp data.
+- [bandcamp-dl](https://github.com/Evolution0/bandcamp-dl) for downloading albums.
+
 ## License
 
 See [LICENSE](LICENSE) for details.
