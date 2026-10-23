@@ -7,7 +7,7 @@ import fs from 'fs';
 import 'dotenv/config';
 
 const download = async (url: string, options: Config) => {
-  const child = spawn("bandcamp-dl", [url, "--base-dir", options.saveDir], {
+  const child = spawn("bandcamp-dl", [url, "--base-dir", options.saveDir, options.noConfirm === true ? '--no-confirm' : ''], {
     stdio: 'inherit'
   });
 
@@ -47,6 +47,7 @@ const showHelp = () => {
 
 interface Config {
   saveDir: string;
+  noConfirm: boolean;
 }
 
 const loadConfig = async () => {
