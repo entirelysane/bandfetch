@@ -87,6 +87,8 @@ const main = async () => {
   const bcfetch = new BandcampFetch({ cookie });
   const albums = await bcfetch.band.getDiscography({ bandUrl });
 
+  console.log(`Save directory is: "${config.saveDir}"`);
+
   for (const album of albums) {
     if (!album.url) {
       // FIXME: add log flag
