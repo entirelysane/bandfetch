@@ -18,7 +18,9 @@ export interface Config {
 }
 
 const configDir = join(
-  process.env.XDG_CONFIG_HOME || join(homedir(), ".config"),
+  process.env.XDG_CONFIG_HOME ||
+  process.env.APPDATA ||
+  join(homedir(), ".config"),
   APP_NAME,
 );
 
