@@ -1,40 +1,10 @@
-import { BandcampFetch } from 'bandcamp-fetch';
-import { spawn } from 'node:child_process';
-import { once } from 'node:events';
-import { argv } from 'node:process';
 import 'dotenv/config';
 
-import { Config, loadConfig } from './config';
+import { BandcampFetch } from 'bandcamp-fetch';
+import { argv } from 'node:process';
 
-const download = async (url: string, options: Config) => {
-  const args = [
-    url,
-    "--base-dir",
-    options.saveDir,
-    "--template",
-    options.template,
-    "--case-convert",
-    options.caseConvert,
-  ];
-
-  if (options.noConfirm) args.push("--no-confirm");
-  if (options.keepSpaces) args.push("--keep-spaces");
-  if (options.noSlugify) args.push("--no-slugify");
-  if (options.embedArt) args.push("--embed-art");
-  if (options.embedLyrics) args.push("--embed-lyrics");
-  if (options.noArt) args.push("--no-art");
-  if (options.overwrite) args.push("--overwrite");
-
-  const child = spawn("bandcamp-dl", args, {
-    stdio: "inherit",
-  });
-
-  const [code] = await once(child, "close");
-
-  if (code !== 0) {
-    throw new Error(`Downloader exited with code ${code}`);
-  }
-};
+import { loadConfig } from './config';
+import { download } from './download';
 
 const getArgs = (): { index: number, value: string }[] => {
   const withoutLaunch = argv.slice(2, argv.length);
@@ -51,6 +21,7 @@ const isValidHttpsUrl = (urlString: string): boolean => {
   return url.protocol === 'https:';
 }
 
+// FIXME: write understandable helpme
 const showHelp = () => {
   console.log('Specify album url');
   console.log('---');
@@ -60,11 +31,9 @@ const showHelp = () => {
   console.log('And yes. Only one line for now. Maybe later I\'ll do whole list or something like that')
 }
 
-// FIXME: add cmd arg
 const main = async () => {
   const args = getArgs();
 
-  // FIXME: write understandable helpme
   if (args.length === 0) {
     showHelp();
     return 1;
@@ -99,7 +68,11 @@ const main = async () => {
     console.log(`${album.artist?.name} - ${album.name}`);
     console.log(`Downloading: ${album.url}`);
 
-    await download(album.url.toString(), config);
+    try {
+      await download(album.url.toString(), config);
+    } catch {
+      console.log('Something went wrong. Moving on...');
+    }
   }
 }
 
