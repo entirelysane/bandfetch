@@ -1,12 +1,11 @@
-import 'dotenv/config';
+import "dotenv/config";
+import { BandcampFetch } from "bandcamp-fetch";
 
-import { BandcampFetch } from 'bandcamp-fetch';
+import { loadConfig } from "./config";
+import { download } from "./download";
+import { getArgs, isValidUrl, showHelp } from "./cli";
 
-import { loadConfig } from './config';
-import { download } from './download';
-import { getArgs, showHelp, isValidUrl } from './cli';
-
-const main = async () => {
+const main = async (): Promise<number> => {
   const args = getArgs();
 
   if (args.length === 0) {
@@ -15,52 +14,67 @@ const main = async () => {
   }
 
   const bandUrl = args[0].value;
+
   if (!isValidUrl(bandUrl)) {
-    console.log('You sure about your link? Seems like it\'s broken\n\n');
+    console.error("Invalid Bandcamp URL.");
     showHelp();
     return 1;
   }
 
-  const config = await loadConfig();
-
   const cookie = process.env.BANDCAMP_COOKIE;
+
   if (!cookie) {
-    throw new Error("BANDCAMP_COOKIE is not set");
+    throw new Error("BANDCAMP_COOKIE is not set.");
   }
 
-  const bcfetch = new BandcampFetch({ cookie });
-  const albums = await bcfetch.band.getDiscography({ bandUrl });
+  const config = await loadConfig();
+  const bandcamp = new BandcampFetch({ cookie });
+  const albums = await bandcamp.band.getDiscography({ bandUrl });
 
-  console.log(`Save directory is: "${config.saveDir}"`);
+  console.log(`Save directory: ${config.saveDir}`);
+  console.log(`Found ${albums.length} album(s).\n`);
+
+  let hasErrors = false;
 
   for (const album of albums) {
     if (!album.url) {
-      // FIXME: add log flag
-      console.log(`[ERROR] album.url is broken (${album.url})`);
+      console.error(`[ERROR] Missing URL for album: ${album.name}`);
+      hasErrors = true;
       continue;
     }
 
-    console.log(`${album.artist?.name} - ${album.name}`);
+    console.log(`${album.artist?.name ?? "Unknown artist"} - ${album.name}`);
     console.log(`Downloading: ${album.url}`);
 
     try {
       await download(album.url.toString(), config);
-    } catch (error) {
-      console.error('Something went wrong. Moving on...');
-      console.error(error);
+    } catch (error: unknown) {
+      hasErrors = true;
+
+      console.error("Download failed. Skipping to the next album.");
+
+      if (error instanceof Error) {
+        console.error(error.message);
+      } else {
+        console.error(error);
+      }
     }
+
+    console.log();
   }
 
-  return 0;
-}
+  return hasErrors ? 1 : 0;
+};
 
 main()
-  .then((code) => {
-    if (typeof code === "number") {
-      process.exitCode = code;
-    }
+  .then((exitCode) => {
+    process.exitCode = exitCode;
   })
   .catch((error: unknown) => {
-    console.error(error);
+    console.error(
+      "Fatal error:",
+      error instanceof Error ? error.message : error,
+    );
+
     process.exitCode = 1;
   });
