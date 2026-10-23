@@ -1,4 +1,5 @@
 import { argv } from 'node:process';
+import pc from 'picocolors';
 
 const APP_NAME = "bandcamp-get-discography"; // FIXME: придумай что-то покороче
 
@@ -19,26 +20,26 @@ export const isValidUrl = (urlString: string): boolean => {
 
 export const showHelp = () => {
   console.log(`
-Bandcamp Discography Downloader
+${pc.bold(pc.cyan("Bandcamp Discography Downloader"))}
 Download albums from a Bandcamp artist's discography.
 
-USAGE:
-  ${APP_NAME} <artist-url>
+${pc.bold("USAGE:")}
+  ${pc.green(APP_NAME)} ${pc.yellow("<artist-url>")}
 
-ARGUMENTS:
-  <artist-url>    URL of the Bandcamp artist page
+${pc.bold("ARGUMENTS:")}
+  ${pc.yellow("<artist-url>")}    URL of the Bandcamp artist page
 
-EXAMPLES:
-  ${APP_NAME} https://artist.bandcamp.com
+${pc.bold("EXAMPLES:")}
+  ${pc.dim("$")} ${pc.green(APP_NAME)} ${pc.cyan(pc.underline("https://artist.bandcamp.com"))}
 
-NOTES:
-  - Only HTTPS URLs are accepted.
+${pc.bold("NOTES:")}
+  - Only ${pc.cyan("HTTPS")} URLs are accepted.
   - The artist's discography is processed sequentially.
   - Failed downloads are skipped so the remaining albums can be processed.
-  - Download settings are read from config.json.
-  - BANDCAMP_COOKIE must be set in the environment.
+  - Download settings are read from ${pc.yellow("config.json")}.
+  - ${pc.yellow("BANDCAMP_COOKIE")} must be set in the environment.
 
-For download options, see:
-  https://github.com/Evolution0/bandcamp-dl#options
+${pc.bold("MORE INFO:")}
+  ${pc.cyan(pc.underline("https://github.com/Evolution0/bandcamp-dl#options"))}
 `);
 };
