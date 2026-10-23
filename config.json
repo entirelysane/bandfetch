@@ -1,4 +1,12 @@
 {
-  "saveDir": "/home/entirely_sane/Music/",
-  "noConfirm": true
+  "saveDir": "/home/entirely_sane/Music/Bandcamp",
+  "noConfirm": true,
+  "template": "%{artist}/%{date} - %{album}/%{track} - %{title}",
+  "keepSpaces": true,
+  "noSlugify": false,
+  "caseConvert": "none",
+  "embedArt": true,
+  "embedLyrics": false,
+  "noArt": false,
+  "overwrite": false
 }

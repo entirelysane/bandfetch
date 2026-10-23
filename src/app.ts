@@ -7,17 +7,32 @@ import fs from 'fs';
 import 'dotenv/config';
 
 const download = async (url: string, options: Config) => {
-  const child = spawn("bandcamp-dl", [url, "--base-dir", options.saveDir, options.noConfirm === true ? '--no-confirm' : ''], {
-    stdio: 'inherit'
-  });
+  const args = [
+    url,
+    "--base-dir",
+    options.saveDir,
+    "--template",
+    options.template,
+    "--case-convert",
+    options.caseConvert,
+  ];
 
-  child.on("error", (error) => {
-    console.error('Ooops! Something is fucked up: ' + error.message);
+  if (options.noConfirm) args.push("--no-confirm");
+  if (options.keepSpaces) args.push("--keep-spaces");
+  if (options.noSlugify) args.push("--no-slugify");
+  if (options.embedArt) args.push("--embed-art");
+  if (options.embedLyrics) args.push("--embed-lyrics");
+  if (options.noArt) args.push("--no-art");
+  if (options.overwrite) args.push("--overwrite");
+
+  const child = spawn("bandcamp-dl", args, {
+    stdio: "inherit",
   });
 
   const [code] = await once(child, "close");
+
   if (code !== 0) {
-    throw new Error('Downloader return code ' + code);
+    throw new Error(`Downloader exited with code ${code}`);
   }
 };
 
@@ -48,6 +63,14 @@ const showHelp = () => {
 interface Config {
   saveDir: string;
   noConfirm: boolean;
+  template: string;
+  keepSpaces: boolean;
+  noSlugify: boolean;
+  caseConvert: "lower" | "upper" | "camel" | "none";
+  embedArt: boolean;
+  embedLyrics: boolean;
+  noArt: boolean;
+  overwrite: boolean;
 }
 
 const loadConfig = async () => {
