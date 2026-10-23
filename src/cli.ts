@@ -1,7 +1,7 @@
 import { argv } from 'node:process';
 import pc from 'picocolors';
 
-const APP_NAME = "bandcamp-get-discography"; // FIXME: придумай что-то покороче
+export const APP_NAME = "bandcamp-get-discography"; // FIXME: придумай что-то покороче
 
 export const getArgs = (): { index: number, value: string }[] => {
   const withoutLaunch = argv.slice(2, argv.length);

@@ -17,3 +17,13 @@
 }
 ```
 ```
+
+
+```
+mkdir -p ~/.config/bandcamp-get-discography
+cp config.json ~/.config/bandcamp-get-discography/config.json
+```
+```
+```
+```
+```
