@@ -1,5 +1,7 @@
 import { argv } from 'node:process';
 
+const APP_NAME = "bandcamp-get-discography"; // FIXME: придумай что-то покороче
+
 export const getArgs = (): { index: number, value: string }[] => {
   const withoutLaunch = argv.slice(2, argv.length);
   return withoutLaunch
@@ -15,14 +17,28 @@ export const isValidUrl = (urlString: string): boolean => {
   return url.protocol === 'https:';
 }
 
-// FIXME: write understandable helpme
 export const showHelp = () => {
-  console.log('Specify album url');
-  console.log('---');
-  console.log('Try something like this:');
-  console.log('<binName> <bandcampLink>');
-  console.log('\n\n');
-  console.log('And yes. Only one line for now. Maybe later I\'ll do whole list or something like that')
-}
+  console.log(`
+Bandcamp Discography Downloader
+Download albums from a Bandcamp artist's discography.
 
+USAGE:
+  ${APP_NAME} <artist-url>
 
+ARGUMENTS:
+  <artist-url>    URL of the Bandcamp artist page
+
+EXAMPLES:
+  ${APP_NAME} https://artist.bandcamp.com
+
+NOTES:
+  - Only HTTPS URLs are accepted.
+  - The artist's discography is processed sequentially.
+  - Failed downloads are skipped so the remaining albums can be processed.
+  - Download settings are read from config.json.
+  - BANDCAMP_COOKIE must be set in the environment.
+
+For download options, see:
+  https://github.com/Evolution0/bandcamp-dl#options
+`);
+};
