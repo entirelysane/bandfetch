@@ -1,11 +1,11 @@
 {
-  "name": "bandcamp-get-discography",
+  "name": "bandfetch",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "tsx src/app.ts",
-    "build": "bun build --compile --target=bun-linux-x64 src/app.ts --outfile dist/bandcamp-get-discography"
+    "build": "bun build --compile --target=bun-linux-x64 src/app.ts --outfile dist/bandfetch"
   },
   "keywords": [],
   "author": "",

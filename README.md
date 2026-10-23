@@ -1,4 +1,4 @@
-# Bandcamp get discography
+# bandfetch
 
 ```json
 ```
@@ -20,8 +20,8 @@
 
 
 ```
-mkdir -p ~/.config/bandcamp-get-discography
-cp config.json ~/.config/bandcamp-get-discography/config.json
+mkdir -p ~/.config/bandfetch
+cp config.json ~/.config/bandfetch/config.json
 ```
 ```
 ```

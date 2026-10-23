@@ -1,7 +1,7 @@
 import { argv } from 'node:process';
 import pc from 'picocolors';
 
-export const APP_NAME = "bandcamp-get-discography"; // FIXME: придумай что-то покороче
+export const APP_NAME = "bandfetch";
 
 export const getArgs = (): { index: number, value: string }[] => {
   const withoutLaunch = argv.slice(2, argv.length);
@@ -20,7 +20,7 @@ export const isValidUrl = (urlString: string): boolean => {
 
 export const showHelp = () => {
   console.log(`
-${pc.bold(pc.cyan("Bandcamp Discography Downloader"))}
+${pc.bold(pc.cyan("bandfetch"))}
 Download albums from a Bandcamp artist's discography.
 
 ${pc.bold("USAGE:")}
