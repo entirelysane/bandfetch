@@ -24,6 +24,30 @@ bandfetch https://artist.bandcamp.com/
 
 Albums are downloaded one at a time. If a download fails, `bandfetch` skips that album and continues with the remaining discography.
 
+## Development
+
+Clone the repository and install dependencies:
+
+```bash
+git clone https://github.com/entirelysane/bandfetch.git
+cd bandfetch
+pnpm install
+```
+
+Run the application: 
+
+```bash
+pnpm dev https://artist.bandcamp.com
+```
+
+Build the application:
+
+```bash
+pnpm build
+```
+
+Available scripts are defined in `package.json`.
+
 ## Configuration
 
 On its first run, `bandfetch` automatically creates `config.json` with the default settings. You don't need to create the file manually.
