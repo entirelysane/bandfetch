@@ -45,8 +45,9 @@ const main = async () => {
 
     try {
       await download(album.url.toString(), config);
-    } catch {
-      console.log('Something went wrong. Moving on...');
+    } catch (error) {
+      console.error('Something went wrong. Moving on...');
+      console.error(error);
     }
   }
 }
