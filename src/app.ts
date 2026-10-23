@@ -1,35 +1,10 @@
 import 'dotenv/config';
 
 import { BandcampFetch } from 'bandcamp-fetch';
-import { argv } from 'node:process';
 
 import { loadConfig } from './config';
 import { download } from './download';
-
-const getArgs = (): { index: number, value: string }[] => {
-  const withoutLaunch = argv.slice(2, argv.length);
-  return withoutLaunch
-    .map((value, index) => ({ index, value }))
-}
-
-const isValidHttpsUrl = (urlString: string): boolean => {
-  if (!URL.canParse(urlString)) {
-    return false;
-  }
-
-  const url = new URL(urlString);
-  return url.protocol === 'https:';
-}
-
-// FIXME: write understandable helpme
-const showHelp = () => {
-  console.log('Specify album url');
-  console.log('---');
-  console.log('Try something like this:');
-  console.log('<binName> <bandcampLink>');
-  console.log('\n\n');
-  console.log('And yes. Only one line for now. Maybe later I\'ll do whole list or something like that')
-}
+import { getArgs, showHelp, isValidUrl } from './cli';
 
 const main = async () => {
   const args = getArgs();
@@ -40,7 +15,7 @@ const main = async () => {
   }
 
   const bandUrl = args[0].value;
-  if (!isValidHttpsUrl(bandUrl)) {
+  if (!isValidUrl(bandUrl)) {
     console.log('You sure about your link? Seems like it\'s broken\n\n');
     showHelp();
     return;
