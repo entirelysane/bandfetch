@@ -91,3 +91,6 @@ $env:BANDCAMP_COOKIE = "your-cookie-value"
 bandfetch https://artist.bandcamp.com/
 ```
 
+## License
+
+See [LICENSE](LICENSE) for details.
