@@ -1,4 +1,3 @@
-import "dotenv/config";
 import { BandcampFetch } from "bandcamp-fetch";
 
 import { loadConfig } from "./config";
@@ -26,7 +25,8 @@ const main = async (): Promise<number> => {
   const cookie = process.env.BANDCAMP_COOKIE;
 
   if (!cookie) {
-    throw new Error("BANDCAMP_COOKIE is not set.");
+    console.error("BANDCAMP_COOKIE environment variable is not set.");
+    return 1;
   }
 
   const config = await loadConfig();

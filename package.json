@@ -27,7 +27,6 @@
   },
   "dependencies": {
     "bandcamp-fetch": "^3.2.1",
-    "dotenv": "^18.0.8",
     "picocolors": "^1.1.1"
   }
 }
