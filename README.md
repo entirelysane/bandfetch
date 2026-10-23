@@ -1,10 +1,38 @@
 # bandfetch
 
-```json
+Download an artist's discography from Bandcamp.
+
+`bandfetch` is a CLI utility that downloads albums from a Bandcamp artist page.
+
+## Requirements
+
+- [Node.js](https://nodejs.org/)
+- [bandcamp-dl](https://github.com/Evolution0/bandcamp-dl), available on your system's `PATH`
+- A Bandcamp cookie provided through the `BANDCAMP_COOKIE` environment variable.
+
+## Usage
+
+```bash
+bandfetch <artist-url>
 ```
+
+Example:
+
+```bash
+bandfetch https://artist.bandcamp.com/
+```
+
+Albums are downloaded one at a time. If a download fails, `bandfetch` skips that album and continues with the remaining discography.
+
+## Configuration
+
+On its first run, `bandfetch` automatically creates `config.json` with the default settings. You don't need to create the file manually.
+
+Edit `config.json` to customize the available options.
+
+```json
 {
-  // More info about configs you may find in https://github.com/Evolution0/bandcamp-dl#options
-  "saveDir": "/home/entirely_sane/Music/Bandcamp",                 // --base-dir
+  "saveDir": "/home/%user%/Music/Bandcamp",                        // --base-dir
   "noConfirm": true,                                               // --no-confirm
   "template": "%{artist}/%{date} - %{album}/%{track} - %{title}",  // --template
   "keepSpaces": true,                                              // --keep-spaces
@@ -16,14 +44,26 @@
   "overwrite": false                                               // --overwrite
 }
 ```
+
+For a list of supported options, see the [bandcamp-dl documentation](https://github.com/Evolution0/bandcamp-dl#options).
+
+## Authentication
+
+`bandfetch` reads the `BANDCAMP_COOKIE` environment variable from the current process.
+
+Set it in your shell before running the application.
+
+**Linux / macOS (Bash or Zsh):**
+
+```bash
+export BANDCAMP_COOKIE="your-cookie-value"
+bandfetch https://artist.bandcamp.com/
 ```
 
+**Windows PowerShell:**
 
+```powershell
+$env:BANDCAMP_COOKIE = "your-cookie-value"
+bandfetch https://artist.bandcamp.com/
 ```
-mkdir -p ~/.config/bandfetch
-cp config.json ~/.config/bandfetch/config.json
-```
-```
-```
-```
-```
+
