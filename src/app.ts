@@ -5,6 +5,8 @@ import { loadConfig } from "./config";
 import { download } from "./download";
 import { getArgs, isValidUrl, showHelp } from "./cli";
 
+import pc from "picocolors";
+
 const main = async (): Promise<number> => {
   const args = getArgs();
 
@@ -16,7 +18,7 @@ const main = async (): Promise<number> => {
   const bandUrl = args[0].value;
 
   if (!isValidUrl(bandUrl)) {
-    console.error("Invalid Bandcamp URL.");
+    console.error(pc.red("Invalid Bandcamp URL."));
     showHelp();
     return 1;
   }
@@ -38,25 +40,25 @@ const main = async (): Promise<number> => {
 
   for (const album of albums) {
     if (!album.url) {
-      console.error(`[ERROR] Missing URL for album: ${album.name}`);
+      console.error(pc.red(`[ERROR] Missing URL for album: ${album.name}`));
       hasErrors = true;
       continue;
     }
 
     console.log(`${album.artist?.name ?? "Unknown artist"} - ${album.name}`);
-    console.log(`Downloading: ${album.url}`);
+    console.log(pc.green(`Downloading: ${album.url}`));
 
     try {
       await download(album.url.toString(), config);
     } catch (error: unknown) {
       hasErrors = true;
 
-      console.error("Download failed. Skipping to the next album.");
+      console.error(pc.red("Download failed. Skipping to the next album."));
 
       if (error instanceof Error) {
-        console.error(error.message);
+        console.error(pc.red(error.message));
       } else {
-        console.error(error);
+        console.error(pc.red(error?.toString()));
       }
     }
 
@@ -72,8 +74,9 @@ main()
   })
   .catch((error: unknown) => {
     console.error(
-      "Fatal error:",
-      error instanceof Error ? error.message : error,
+      pc.red(
+        `Fatal error: ${error instanceof Error ? error.message : error}`,
+      )
     );
 
     process.exitCode = 1;
