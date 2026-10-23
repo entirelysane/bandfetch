@@ -18,7 +18,7 @@ const main = async () => {
   if (!isValidUrl(bandUrl)) {
     console.log('You sure about your link? Seems like it\'s broken\n\n');
     showHelp();
-    return;
+    return 1;
   }
 
   const config = await loadConfig();
@@ -50,6 +50,17 @@ const main = async () => {
       console.error(error);
     }
   }
+
+  return 0;
 }
 
-main();
+main()
+  .then((code) => {
+    if (typeof code === "number") {
+      process.exitCode = code;
+    }
+  })
+  .catch((error: unknown) => {
+    console.error(error);
+    process.exitCode = 1;
+  });
